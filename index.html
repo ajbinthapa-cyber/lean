@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Lean</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#0B0C0E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Lean">
+<meta name="description" content="Personal cut tracker — calories, macros, training and body composition.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<div id="app">
+
+<!-- ============ TODAY ============ -->
+<section class="screen on" id="s-today">
+  <header class="top">
+    <div class="h-row">
+      <div>
+        <h1 id="t-greet">Today</h1>
+        <p class="sub" id="t-date"></p>
+      </div>
+      <div class="row" style="gap:8px">
+        <button class="btn sm ghost" id="t-prev" aria-label="Previous day">‹</button>
+        <button class="btn sm ghost" id="t-next" aria-label="Next day">›</button>
+        <button class="btn sm ghost" id="t-settings" aria-label="Settings">⚙︎</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="card">
+    <div class="ringwrap">
+      <div class="ring">
+        <svg viewBox="0 0 120 120">
+          <circle class="track" cx="60" cy="60" r="52"></circle>
+          <circle class="fill" id="r-fill" cx="60" cy="60" r="52"
+                  stroke-dasharray="326.7" stroke-dashoffset="326.7"></circle>
+        </svg>
+        <div class="ctr">
+          <div class="big" id="r-left">0</div>
+          <div class="lbl" id="r-lbl">kcal left</div>
+        </div>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div class="macro"><div class="mh"><span style="color:var(--p)">Protein</span><span><b id="m-p">0</b> <span class="muted">/ 0 g</span></span></div><div class="bar"><i id="b-p" style="background:var(--p);width:0"></i></div></div>
+        <div class="macro"><div class="mh"><span style="color:var(--c)">Carbs</span><span><b id="m-c">0</b> <span class="muted">/ 0 g</span></span></div><div class="bar"><i id="b-c" style="background:var(--c);width:0"></i></div></div>
+        <div class="macro"><div class="mh"><span style="color:var(--f)">Fat</span><span><b id="m-f">0</b> <span class="muted">/ 0 g</span></span></div><div class="bar"><i id="b-f" style="background:var(--f);width:0"></i></div></div>
+        <div class="macro"><div class="mh"><span class="muted">Fibre</span><span><b id="m-fib">0</b> <span class="muted">/ 0 g</span></span></div><div class="bar"><i id="b-fib" style="background:var(--dim2);width:0"></i></div></div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="row between" style="font-size:12.5px">
+      <span class="pill" id="t-daytype">—</span>
+      <span class="muted" id="t-eaten">0 eaten · 0 target</span>
+    </div>
+  </div>
+
+  <div class="tiles">
+    <button class="tile" id="a-photo"><span class="ic">📷</span><b>Snap a meal</b><span>AI reads the plate and splits it into items</span></button>
+    <button class="tile" id="a-label"><span class="ic">🏷️</span><b>Scan a label</b><span>Nutrition panel on any packet</span></button>
+    <button class="tile" id="a-search"><span class="ic">🔍</span><b>Search food</b><span>143 Nepali & Indian foods, offline</span></button>
+    <button class="tile" id="a-quick"><span class="ic">⚡</span><b>Quick add</b><span>Combos, recents, favourites</span></button>
+  </div>
+
+  <h2>Today's food</h2>
+  <div class="card flush" id="t-meals"></div>
+
+  <h2 id="t-coach-h">Coach</h2>
+  <div id="t-coach"></div>
+
+  <h2>Water & steps</h2>
+  <div class="card">
+    <div class="row between" style="margin-bottom:12px">
+      <div><b id="w-val">0.0 L</b> <span class="tiny" id="w-tgt"></span></div>
+      <div class="row" style="gap:8px">
+        <button class="btn sm" data-water="-250">−250</button>
+        <button class="btn sm" data-water="250">+250 ml</button>
+        <button class="btn sm" data-water="500">+500</button>
+      </div>
+    </div>
+    <div class="bar"><i id="w-bar" style="background:var(--info);width:0"></i></div>
+    <div class="divider"></div>
+    <div class="row between">
+      <label class="fl" style="margin:0">Steps today</label>
+      <input id="t-steps" type="number" inputmode="numeric" placeholder="0" style="width:120px;text-align:right">
+    </div>
+  </div>
+  <div style="height:20px"></div>
+</section>
+
+<!-- ============ HISTORY ============ -->
+<section class="screen" id="s-log">
+  <header class="top"><div class="h-row"><div><h1>History</h1><p class="sub">Averages matter more than any single day</p></div></div></header>
+  <div class="chips" id="h-range">
+    <button class="chip on" data-n="7">7 days</button>
+    <button class="chip" data-n="14">14 days</button>
+    <button class="chip" data-n="30">30 days</button>
+    <button class="chip" data-n="90">90 days</button>
+  </div>
+  <div id="h-body"></div>
+  <div style="height:20px"></div>
+</section>
+
+<!-- ============ TRAIN ============ -->
+<section class="screen" id="s-train">
+  <header class="top"><div class="h-row"><div><h1>Train</h1><p class="sub" id="tr-plan"></p></div>
+    <button class="btn sm ghost" id="tr-prog">📈</button></div></header>
+  <div id="tr-body"></div>
+  <div style="height:20px"></div>
+</section>
+
+<!-- ============ BODY ============ -->
+<section class="screen" id="s-body">
+  <header class="top"><div class="h-row"><div><h1>Body</h1><p class="sub">The scale lies daily. The trend doesn't.</p></div>
+    <button class="btn sm pri" id="b-add" style="width:auto">＋ Log</button></div></header>
+  <div id="bd-body"></div>
+  <div style="height:20px"></div>
+</section>
+
+<!-- ============ COACH ============ -->
+<section class="screen" id="s-coach">
+  <header class="top"><div class="h-row"><div><h1>Plan</h1><p class="sub">Your numbers, and why they are what they are</p></div></div></header>
+  <div id="cc-body"></div>
+  <div style="height:20px"></div>
+</section>
+
+</div><!-- /#app -->
+
+<nav class="tabs">
+  <button data-tab="today"><span class="ic">◎</span>Today</button>
+  <button data-tab="log"><span class="ic">▤</span>History</button>
+  <button data-tab="train"><span class="ic">🏋️</span>Train</button>
+  <button data-tab="body"><span class="ic">◑</span>Body</button>
+  <button data-tab="coach"><span class="ic">✦</span>Plan</button>
+</nav>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet">
+  <div class="sh"><div class="grab"></div>
+    <div class="row between"><h3 id="sh-title" style="margin:0">—</h3>
+      <button class="btn sm ghost" id="sh-close">Close</button></div>
+    <div id="sh-sub" class="tiny" style="margin-top:3px"></div>
+  </div>
+  <div class="sb" id="sh-body"></div>
+  <div class="sf hide" id="sh-foot"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<input type="file" id="file-cam" accept="image/*" capture="environment" class="hide">
+<input type="file" id="file-lib" accept="image/*" class="hide" multiple>
+<input type="file" id="file-json" accept=".json,application/json" class="hide">
+
+<script src="js/foods.js"></script>
+<script src="js/store.js"></script>
+<script src="js/ai.js"></script>
+<script src="js/coach.js"></script>
+<script src="js/workouts.js"></script>
+<script src="js/ui.js"></script>
+</body>
+</html>
